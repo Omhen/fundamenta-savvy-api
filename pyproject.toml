@@ -1,0 +1,22 @@
+[project]
+name = "fundamental-savvy-api"
+version = "0.1.0"
+description = "FastAPI interface for Fundamental Savvy Database"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.5",
+    "uvicorn[standard]>=0.32.1",
+    "sqlalchemy>=2.0.36",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.10.3",
+    "pydantic-settings>=2.6.1",
+    "alembic>=1.14.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app"]
