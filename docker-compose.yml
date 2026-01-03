@@ -2,7 +2,11 @@ version: '3.8'
 
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      ssh:
+        - github=../../.ssh/id_ed25519_github
     ports:
       - "8000:8000"
     environment:
