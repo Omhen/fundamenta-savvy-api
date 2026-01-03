@@ -1,3 +1,3 @@
-from app.api.v1.endpoints import companies, health
+from app.api.v1.endpoints import health
 
-__all__ = ["companies", "health"]
+__all__ = ["health"]
