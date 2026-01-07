@@ -9,11 +9,8 @@ services:
         - github=../../.ssh/id_ed25519_github
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/fundamental_savvy
-      - ENVIRONMENT=development
-      - API_V1_PREFIX=/api/v1
-      - PROJECT_NAME=Fundamental Savvy API
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy

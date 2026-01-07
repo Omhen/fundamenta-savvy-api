@@ -6,12 +6,11 @@ from app.db.base_class import BaseModel
 class StockSymbol(BaseModel):
     """Stock symbol from the symbol list."""
 
-    id = Column(Integer, primary_key=True, index=True)
-    symbol = Column(String, unique=True, index=True, nullable=False)
-    name = Column(String, nullable=False)
+    symbol = Column(String, primary_key=True)
+    name = Column(String, nullable=True)
     exchange = Column(String, nullable=True)
     exchange_short_name = Column(String, index=True, nullable=True)
-    type = Column(String, nullable=True)
+    currency = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

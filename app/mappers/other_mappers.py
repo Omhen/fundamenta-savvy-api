@@ -3,6 +3,7 @@
 from typing import Optional
 from datetime import datetime
 from fmpclient.models import directory as fmp_directory
+from fmpclient.models import company as fmp_company
 from fmpclient.models import dividends_earnings as fmp_div_earn
 from fmpclient.models import economics as fmp_economics
 from fmpclient.models import market_performance as fmp_market
@@ -40,18 +41,19 @@ from app.models.market_performance import (
 from app.models.sec_filings import SECFiling
 
 
-# Directory mappers
-def map_stock_symbol(dto: fmp_directory.StockSymbol) -> StockSymbol:
+# Company mappers
+def map_stock_symbol(dto: fmp_company.SearchResult) -> StockSymbol:
     """Convert FMP StockSymbol DTO to database model."""
     return StockSymbol(
         symbol=dto.symbol,
         name=dto.name,
-        exchange=dto.exchange,
-        exchange_short_name=dto.exchange_short_name,
-        type=dto.type,
+        exchange=dto.exchange_full_name,
+        exchange_short_name=dto.exchange,
+        currency=dto.currency,
     )
 
 
+# Directory mappers
 def map_exchange(dto: fmp_directory.Exchange) -> Exchange:
     """Convert FMP Exchange DTO to database model."""
     return Exchange(
