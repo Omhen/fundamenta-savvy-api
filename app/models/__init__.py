@@ -25,6 +25,7 @@ from app.models.quotes_prices import (
 # Directory/reference models
 from app.models.directory import (
     StockSymbol,
+    FinancialStatementSymbol,
     Exchange,
     Sector,
     Industry,
@@ -80,6 +81,7 @@ __all__ = [
     "IntradayPrice",
     # Directory/reference models
     "StockSymbol",
+    "FinancialStatementSymbol",
     "Exchange",
     "Sector",
     "Industry",

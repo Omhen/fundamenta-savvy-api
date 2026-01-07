@@ -15,6 +15,17 @@ class StockSymbol(BaseModel):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
 
+class FinancialStatementSymbol(BaseModel):
+    """Symbol with available financial statements."""
+
+    symbol = Column(String, primary_key=True)
+    company_name = Column(String, nullable=True)
+    trading_currency = Column(String, nullable=True)
+    reporting_currency = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+
 class Exchange(BaseModel):
     """Exchange information."""
 

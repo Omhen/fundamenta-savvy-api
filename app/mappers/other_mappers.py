@@ -11,6 +11,7 @@ from fmpclient.models import sec_filings as fmp_sec
 
 from app.models.directory import (
     StockSymbol,
+    FinancialStatementSymbol,
     Exchange,
     Sector,
     Industry,
@@ -50,6 +51,16 @@ def map_stock_symbol(dto: fmp_company.SearchResult) -> StockSymbol:
         exchange=dto.exchange_full_name,
         exchange_short_name=dto.exchange,
         currency=dto.currency,
+    )
+
+
+def map_financial_statement_symbol(dto: fmp_directory.FinancialStatementSymbol) -> FinancialStatementSymbol:
+    """Convert FMP FinancialStatementSymbol DTO to database model."""
+    return FinancialStatementSymbol(
+        symbol=dto.symbol,
+        company_name=dto.company_name,
+        trading_currency=dto.trading_currency,
+        reporting_currency=dto.reporting_currency,
     )
 
 
