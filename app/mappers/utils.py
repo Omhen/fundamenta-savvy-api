@@ -55,12 +55,23 @@ def bulk_insert_or_update(
     model_class = type(models[0])
     table = model_class.__table__
 
-    # Convert models to dictionaries
-    values = [model.dict() if hasattr(model, 'dict') else {
-        c.name: getattr(model, c.name)
-        for c in table.columns
-        if hasattr(model, c.name)
-    } for model in models]
+    # Convert models to dictionaries, excluding id if None (for auto-increment)
+    values = []
+    for model in models:
+        if hasattr(model, 'dict'):
+            model_dict = model.dict()
+        else:
+            model_dict = {
+                c.name: getattr(model, c.name)
+                for c in table.columns
+                if hasattr(model, c.name)
+            }
+
+        # Remove id if it's None to allow auto-increment
+        if model_dict.get('id') is None:
+            model_dict.pop('id', None)
+
+        values.append(model_dict)
 
     # Create insert statement
     stmt = insert(table).values(values)
@@ -108,12 +119,23 @@ def bulk_insert_ignore(
     model_class = type(models[0])
     table = model_class.__table__
 
-    # Convert models to dictionaries
-    values = [model.dict() if hasattr(model, 'dict') else {
-        c.name: getattr(model, c.name)
-        for c in table.columns
-        if hasattr(model, c.name)
-    } for model in models]
+    # Convert models to dictionaries, excluding id if None (for auto-increment)
+    values = []
+    for model in models:
+        if hasattr(model, 'dict'):
+            model_dict = model.dict()
+        else:
+            model_dict = {
+                c.name: getattr(model, c.name)
+                for c in table.columns
+                if hasattr(model, c.name)
+            }
+
+        # Remove id if it's None to allow auto-increment
+        if model_dict.get('id') is None:
+            model_dict.pop('id', None)
+
+        values.append(model_dict)
 
     # Create insert statement with ON CONFLICT DO NOTHING
     stmt = insert(table).values(values).on_conflict_do_nothing(
