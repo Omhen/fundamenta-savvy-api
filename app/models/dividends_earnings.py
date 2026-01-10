@@ -40,7 +40,7 @@ class DividendCalendarEvent(BaseModel):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     __table_args__ = (
-        Index('idx_div_calendar_symbol_date', 'symbol', 'date'),
+        Index('idx_div_calendar_symbol_date', 'symbol', 'date', unique=True),
     )
 
 
