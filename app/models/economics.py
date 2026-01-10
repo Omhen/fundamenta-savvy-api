@@ -35,8 +35,7 @@ class EconomicIndicator(BaseModel):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
-        Index('idx_econ_indicator_name_date', 'name', 'date'),
-        Index('idx_econ_indicator_country_name', 'country', 'name'),
+        Index('idx_econ_indicator_name_date_country', 'name', 'date', 'country', unique=True),
     )
 
 
