@@ -1,19 +1,10 @@
 """Mappers for converting FMP client DTOs to database models - Company data."""
 
 from typing import Optional
-from datetime import datetime, date
 
 from fmpclient.models import company as fmp_company
 
-
-def parse_date(date_str: Optional[str]) -> Optional[date]:
-    """Parse a date string to a date object."""
-    if not date_str:
-        return None
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
-        return None
+from app.mappers.utils import parse_date
 from app.models.company_profile import (
     CompanyProfile,
     Executive,

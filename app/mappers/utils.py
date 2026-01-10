@@ -1,11 +1,35 @@
 """Utility functions for batch mapping and database operations."""
 
+from datetime import datetime, date
 from typing import List, TypeVar, Callable, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import insert
 
 T = TypeVar('T')
 U = TypeVar('U')
+
+
+def parse_date(date_str: Optional[str]) -> Optional[date]:
+    """Parse a date string to a date object."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def parse_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
+    """Parse a datetime string to a datetime object."""
+    if not datetime_str:
+        return None
+    try:
+        return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        try:
+            return datetime.strptime(datetime_str, "%Y-%m-%d")
+        except ValueError:
+            return None
 
 
 def map_batch(dtos: List[T], mapper_func: Callable[[T], U], **kwargs) -> List[U]:

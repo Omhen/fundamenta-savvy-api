@@ -1,17 +1,6 @@
 """Mappers for converting FMP client DTOs to database models - Other data types."""
 
 from typing import Optional
-from datetime import datetime, date
-
-
-def parse_date(date_str: Optional[str]) -> Optional[date]:
-    """Parse a date string to a date object."""
-    if not date_str:
-        return None
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
-        return None
 from fmpclient.models import directory as fmp_directory
 from fmpclient.models import company as fmp_company
 from fmpclient.models import dividends_earnings as fmp_div_earn
@@ -19,6 +8,7 @@ from fmpclient.models import economics as fmp_economics
 from fmpclient.models import market_performance as fmp_market
 from fmpclient.models import sec_filings as fmp_sec
 
+from app.mappers.utils import parse_date
 from app.models.directory import (
     StockSymbol,
     FinancialStatementSymbol,
