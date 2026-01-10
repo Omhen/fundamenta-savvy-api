@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -7,7 +7,7 @@ class TreasuryRate(BaseModel):
     """Treasury rate data for various maturity periods."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, unique=True, index=True, nullable=False)
+    date = Column(Date, unique=True, index=True, nullable=False)
     month_1 = Column(Float, nullable=True)
     month_2 = Column(Float, nullable=True)
     month_3 = Column(Float, nullable=True)
@@ -27,7 +27,7 @@ class EconomicIndicator(BaseModel):
     """Economic indicator data point."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     value = Column(Float, nullable=True)
     name = Column(String, index=True, nullable=True)
     country = Column(String, index=True, nullable=True)
@@ -43,7 +43,7 @@ class EconomicCalendarEvent(BaseModel):
     """Scheduled economic data release event."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     event = Column(String, index=True, nullable=True)
     country = Column(String, index=True, nullable=True)
     currency = Column(String, nullable=True)
@@ -57,8 +57,7 @@ class EconomicCalendarEvent(BaseModel):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     __table_args__ = (
-        Index('idx_econ_cal_date_country', 'date', 'country'),
-        Index('idx_econ_cal_event', 'event'),
+        Index('idx_econ_cal_date_event_country', 'date', 'event', 'country', unique=True),
     )
 
 

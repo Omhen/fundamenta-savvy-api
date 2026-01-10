@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -8,7 +8,7 @@ class SectorPerformance(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     sector = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     exchange = Column(String, nullable=True)
     average_change = Column(Float, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -23,7 +23,7 @@ class IndustryPerformance(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     industry = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     exchange = Column(String, nullable=True)
     average_change = Column(Float, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -37,7 +37,7 @@ class SectorPE(BaseModel):
     """Sector P/E ratio snapshot data."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     sector = Column(String, index=True, nullable=False)
     exchange = Column(String, nullable=True)
     pe = Column(String, nullable=True)
@@ -52,7 +52,7 @@ class IndustryPE(BaseModel):
     """Industry P/E ratio snapshot data."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     industry = Column(String, index=True, nullable=False)
     exchange = Column(String, nullable=True)
     pe = Column(String, nullable=True)
@@ -73,7 +73,7 @@ class StockGainer(BaseModel):
     price = Column(Float, nullable=True)
     exchange = Column(String, nullable=True)
     changes_percentage = Column(String, nullable=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -91,7 +91,7 @@ class StockLoser(BaseModel):
     price = Column(Float, nullable=True)
     exchange = Column(String, nullable=True)
     changes_percentage = Column(String, nullable=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -109,7 +109,7 @@ class ActiveStock(BaseModel):
     price = Column(Float, nullable=True)
     changes_percentage = Column(String, nullable=True)
     exchange = Column(String, nullable=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (

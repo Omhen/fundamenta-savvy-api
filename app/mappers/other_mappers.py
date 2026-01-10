@@ -1,7 +1,17 @@
 """Mappers for converting FMP client DTOs to database models - Other data types."""
 
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
+
+
+def parse_date(date_str: Optional[str]) -> Optional[date]:
+    """Parse a date string to a date object."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return None
 from fmpclient.models import directory as fmp_directory
 from fmpclient.models import company as fmp_company
 from fmpclient.models import dividends_earnings as fmp_div_earn
@@ -95,7 +105,7 @@ def map_symbol_change(dto: fmp_directory.SymbolChange) -> SymbolChange:
     return SymbolChange(
         old_symbol=dto.old_symbol,
         new_symbol=dto.new_symbol,
-        change_date=dto.change_date,
+        change_date=parse_date(dto.change_date),
         change_type=dto.change_type,
     )
 
@@ -105,13 +115,13 @@ def map_dividend(dto: fmp_div_earn.Dividend) -> Dividend:
     """Convert FMP Dividend DTO to database model."""
     return Dividend(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         label=dto.label,
         adj_dividend=dto.adj_dividend,
         dividend=dto.dividend,
-        record_date=dto.record_date,
-        payment_date=dto.payment_date,
-        declaration_date=dto.declaration_date,
+        record_date=parse_date(dto.record_date),
+        payment_date=parse_date(dto.payment_date),
+        declaration_date=parse_date(dto.declaration_date),
     )
 
 
@@ -119,13 +129,13 @@ def map_dividend_calendar_event(dto: fmp_div_earn.DividendCalendarEvent) -> Divi
     """Convert FMP DividendCalendarEvent DTO to database model."""
     return DividendCalendarEvent(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         label=dto.label,
         adj_dividend=dto.adj_dividend,
         dividend=dto.dividend,
-        record_date=dto.record_date,
-        payment_date=dto.payment_date,
-        declaration_date=dto.declaration_date,
+        record_date=parse_date(dto.record_date),
+        payment_date=parse_date(dto.payment_date),
+        declaration_date=parse_date(dto.declaration_date),
         dividend_yield=dto.dividend_yield,
     )
 
@@ -134,7 +144,7 @@ def map_earnings_report(dto: fmp_div_earn.EarningsReport) -> EarningsReport:
     """Convert FMP EarningsReport DTO to database model."""
     return EarningsReport(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         eps=dto.eps,
         eps_estimated=dto.eps_estimated,
         time=dto.time,
@@ -149,7 +159,7 @@ def map_earnings_calendar_event(dto: fmp_div_earn.EarningsCalendarEvent) -> Earn
     """Convert FMP EarningsCalendarEvent DTO to database model."""
     return EarningsCalendarEvent(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         eps=dto.eps,
         eps_estimated=dto.eps_estimated,
         time=dto.time,
@@ -164,7 +174,7 @@ def map_earnings_calendar_event(dto: fmp_div_earn.EarningsCalendarEvent) -> Earn
 def map_treasury_rate(dto: fmp_economics.TreasuryRate) -> TreasuryRate:
     """Convert FMP TreasuryRate DTO to database model."""
     return TreasuryRate(
-        date=dto.date,
+        date=parse_date(dto.date),
         month_1=dto.month_1,
         month_2=dto.month_2,
         month_3=dto.month_3,
@@ -183,7 +193,7 @@ def map_treasury_rate(dto: fmp_economics.TreasuryRate) -> TreasuryRate:
 def map_economic_indicator(dto: fmp_economics.EconomicIndicator) -> EconomicIndicator:
     """Convert FMP EconomicIndicator DTO to database model."""
     return EconomicIndicator(
-        date=dto.date,
+        date=parse_date(dto.date),
         value=dto.value,
         name=dto.name,
         country=dto.country,
@@ -194,7 +204,7 @@ def map_economic_indicator(dto: fmp_economics.EconomicIndicator) -> EconomicIndi
 def map_economic_calendar_event(dto: fmp_economics.EconomicCalendarEvent) -> EconomicCalendarEvent:
     """Convert FMP EconomicCalendarEvent DTO to database model."""
     return EconomicCalendarEvent(
-        date=dto.date,
+        date=parse_date(dto.date),
         event=dto.event,
         country=dto.country,
         currency=dto.currency,
@@ -222,7 +232,7 @@ def map_sector_performance(dto: fmp_market.SectorPerformance) -> SectorPerforman
     """Convert FMP SectorPerformance DTO to database model."""
     return SectorPerformance(
         sector=dto.sector,
-        date=dto.date,
+        date=parse_date(dto.date),
         exchange=dto.exchange,
         average_change=dto.average_change,
     )
@@ -232,7 +242,7 @@ def map_industry_performance(dto: fmp_market.IndustryPerformance) -> IndustryPer
     """Convert FMP IndustryPerformance DTO to database model."""
     return IndustryPerformance(
         industry=dto.industry,
-        date=dto.date,
+        date=parse_date(dto.date),
         exchange=dto.exchange,
         average_change=dto.average_change,
     )
@@ -241,7 +251,7 @@ def map_industry_performance(dto: fmp_market.IndustryPerformance) -> IndustryPer
 def map_sector_pe(dto: fmp_market.SectorPE) -> SectorPE:
     """Convert FMP SectorPE DTO to database model."""
     return SectorPE(
-        date=dto.date,
+        date=parse_date(dto.date),
         sector=dto.sector,
         exchange=dto.exchange,
         pe=dto.pe,
@@ -251,22 +261,22 @@ def map_sector_pe(dto: fmp_market.SectorPE) -> SectorPE:
 def map_industry_pe(dto: fmp_market.IndustryPE) -> IndustryPE:
     """Convert FMP IndustryPE DTO to database model."""
     return IndustryPE(
-        date=dto.date,
+        date=parse_date(dto.date),
         industry=dto.industry,
         exchange=dto.exchange,
         pe=dto.pe,
     )
 
 
-def map_stock_gainer(dto: fmp_market.StockGainer, date: Optional[str] = None) -> StockGainer:
+def map_stock_gainer(dto: fmp_market.StockGainer, date_val: Optional[date] = None) -> StockGainer:
     """Convert FMP StockGainer DTO to database model.
 
     Args:
         dto: FMP StockGainer DTO
-        date: Date string (required as it's not in the DTO)
+        date_val: Date object (required as it's not in the DTO)
     """
-    if not date:
-        date = datetime.now().strftime("%Y-%m-%d")
+    if not date_val:
+        date_val = datetime.now().date()
 
     return StockGainer(
         symbol=dto.symbol,
@@ -275,19 +285,19 @@ def map_stock_gainer(dto: fmp_market.StockGainer, date: Optional[str] = None) ->
         price=dto.price,
         exchange=dto.exchange,
         changes_percentage=dto.changes_percentage,
-        date=date,
+        date=date_val,
     )
 
 
-def map_stock_loser(dto: fmp_market.StockLoser, date: Optional[str] = None) -> StockLoser:
+def map_stock_loser(dto: fmp_market.StockLoser, date_val: Optional[date] = None) -> StockLoser:
     """Convert FMP StockLoser DTO to database model.
 
     Args:
         dto: FMP StockLoser DTO
-        date: Date string (required as it's not in the DTO)
+        date_val: Date object (required as it's not in the DTO)
     """
-    if not date:
-        date = datetime.now().strftime("%Y-%m-%d")
+    if not date_val:
+        date_val = datetime.now().date()
 
     return StockLoser(
         symbol=dto.symbol,
@@ -296,19 +306,19 @@ def map_stock_loser(dto: fmp_market.StockLoser, date: Optional[str] = None) -> S
         price=dto.price,
         exchange=dto.exchange,
         changes_percentage=dto.changes_percentage,
-        date=date,
+        date=date_val,
     )
 
 
-def map_active_stock(dto: fmp_market.ActiveStock, date: Optional[str] = None) -> ActiveStock:
+def map_active_stock(dto: fmp_market.ActiveStock, date_val: Optional[date] = None) -> ActiveStock:
     """Convert FMP ActiveStock DTO to database model.
 
     Args:
         dto: FMP ActiveStock DTO
-        date: Date string (required as it's not in the DTO)
+        date_val: Date object (required as it's not in the DTO)
     """
-    if not date:
-        date = datetime.now().strftime("%Y-%m-%d")
+    if not date_val:
+        date_val = datetime.now().date()
 
     return ActiveStock(
         symbol=dto.symbol,
@@ -317,18 +327,31 @@ def map_active_stock(dto: fmp_market.ActiveStock, date: Optional[str] = None) ->
         price=dto.price,
         changes_percentage=dto.changes_percentage,
         exchange=dto.exchange,
-        date=date,
+        date=date_val,
     )
 
 
 # SEC filings mapper
+def parse_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
+    """Parse a datetime string to a datetime object."""
+    if not datetime_str:
+        return None
+    try:
+        return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        try:
+            return datetime.strptime(datetime_str, "%Y-%m-%d")
+        except ValueError:
+            return None
+
+
 def map_sec_filing(dto: fmp_sec.SECFiling) -> SECFiling:
     """Convert FMP SECFiling DTO to database model."""
     return SECFiling(
         symbol=dto.symbol,
         cik=dto.cik,
-        accepted_date=dto.accepted_date,
-        filing_date=dto.filing_date,
+        accepted_date=parse_datetime(dto.accepted_date),
+        filing_date=parse_date(dto.filing_date),
         form_type=dto.form_type,
         has_financials=dto.has_financials or False,
         link=dto.link,

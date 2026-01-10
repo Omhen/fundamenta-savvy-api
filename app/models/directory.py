@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -68,7 +68,7 @@ class SymbolChange(BaseModel):
     id = Column(Integer, primary_key=True, index=True)
     old_symbol = Column(String, index=True, nullable=False)
     new_symbol = Column(String, index=True, nullable=False)
-    change_date = Column(String, index=True, nullable=False)
+    change_date = Column(Date, index=True, nullable=False)
     change_type = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

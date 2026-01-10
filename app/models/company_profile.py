@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, Boolean, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -37,7 +37,7 @@ class CompanyProfile(BaseModel):
     dcf_diff = Column(Float, nullable=True)
     dcf = Column(Float, nullable=True)
     image = Column(String, nullable=True)
-    ipo_date = Column(String, nullable=True)
+    ipo_date = Column(Date, nullable=True)
     default_image = Column(Boolean, nullable=True)
     is_etf = Column(Boolean, default=False)
     is_actively_trading = Column(Boolean, default=True)
@@ -77,7 +77,7 @@ class MarketCapitalization(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     market_cap = Column(Float, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
@@ -96,7 +96,7 @@ class EmployeeCount(BaseModel):
     period_of_report = Column(String, nullable=True)
     company_name = Column(String, nullable=True)
     form_type = Column(String, nullable=True)
-    filing_date = Column(String, index=True, nullable=True)
+    filing_date = Column(Date, index=True, nullable=True)
     employee_count = Column(Integer, nullable=True)
     source = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -111,7 +111,7 @@ class SharesFloat(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=True)
+    date = Column(Date, index=True, nullable=True)
     free_float = Column(Float, nullable=True)
     float_shares = Column(Float, nullable=True)
     outstanding_shares = Column(Float, nullable=True)
@@ -130,6 +130,6 @@ class DelistedCompany(BaseModel):
     symbol = Column(String, unique=True, index=True, nullable=False)
     company_name = Column(String, nullable=True)
     exchange = Column(String, nullable=True)
-    ipo_date = Column(String, nullable=True)
-    delisted_date = Column(String, index=True, nullable=True)
+    ipo_date = Column(Date, nullable=True)
+    delisted_date = Column(Date, index=True, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

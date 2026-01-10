@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -8,13 +8,13 @@ class Dividend(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     label = Column(String, nullable=True)
     adj_dividend = Column(Float, nullable=True)
     dividend = Column(Float, nullable=True)
-    record_date = Column(String, nullable=True)
-    payment_date = Column(String, nullable=True)
-    declaration_date = Column(String, nullable=True)
+    record_date = Column(Date, nullable=True)
+    payment_date = Column(Date, nullable=True)
+    declaration_date = Column(Date, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
@@ -28,13 +28,13 @@ class DividendCalendarEvent(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     label = Column(String, nullable=True)
     adj_dividend = Column(Float, nullable=True)
     dividend = Column(Float, nullable=True)
-    record_date = Column(String, nullable=True)
-    payment_date = Column(String, nullable=True)
-    declaration_date = Column(String, nullable=True)
+    record_date = Column(Date, nullable=True)
+    payment_date = Column(Date, nullable=True)
+    declaration_date = Column(Date, nullable=True)
     dividend_yield = Column(Float, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -49,7 +49,7 @@ class EarningsReport(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     eps = Column(Float, nullable=True)
     eps_estimated = Column(Float, nullable=True)
     time = Column(String, nullable=True)
@@ -71,7 +71,7 @@ class EarningsCalendarEvent(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     eps = Column(Float, nullable=True)
     eps_estimated = Column(Float, nullable=True)
     time = Column(String, nullable=True)

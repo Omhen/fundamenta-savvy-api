@@ -1,8 +1,33 @@
 """Mappers for converting FMP client DTOs to database models - Prices and Quotes."""
 
 from typing import Optional
+from datetime import datetime, date
+
 from fmpclient.models import quote as fmp_quote
 from fmpclient.models import price as fmp_price
+
+
+def parse_date(date_str: Optional[str]) -> Optional[date]:
+    """Parse a date string to a date object."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def parse_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
+    """Parse a datetime string to a datetime object."""
+    if not datetime_str:
+        return None
+    try:
+        return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        try:
+            return datetime.strptime(datetime_str, "%Y-%m-%d")
+        except ValueError:
+            return None
 from app.models.quotes_prices import (
     Quote,
     HistoricalPrice,
@@ -50,7 +75,7 @@ def map_historical_price(dto: fmp_price.HistoricalPrice, symbol: Optional[str] =
 
     return HistoricalPrice(
         symbol=symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         open=dto.open,
         high=dto.high,
         low=dto.low,
@@ -78,7 +103,7 @@ def map_intraday_price(dto: fmp_price.IntradayPrice, symbol: Optional[str] = Non
 
     return IntradayPrice(
         symbol=symbol,
-        date=dto.date,
+        date=parse_datetime(dto.date),
         open=dto.open,
         high=dto.high,
         low=dto.low,

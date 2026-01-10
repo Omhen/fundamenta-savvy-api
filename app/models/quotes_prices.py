@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, BigInteger, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, BigInteger, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -42,7 +42,7 @@ class HistoricalPrice(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     open = Column(Float, nullable=False)
     high = Column(Float, nullable=False)
     low = Column(Float, nullable=False)
@@ -67,7 +67,7 @@ class IntradayPrice(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(String, index=True, nullable=False)
+    date = Column(DateTime, index=True, nullable=False)
     open = Column(Float, nullable=False)
     high = Column(Float, nullable=False)
     low = Column(Float, nullable=False)

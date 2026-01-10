@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Boolean, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -9,8 +9,8 @@ class SECFiling(BaseModel):
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
     cik = Column(String, index=True, nullable=True)
-    accepted_date = Column(String, nullable=True)
-    filing_date = Column(String, index=True, nullable=False)
+    accepted_date = Column(DateTime, nullable=True)
+    filing_date = Column(Date, index=True, nullable=False)
     form_type = Column(String, index=True, nullable=True)
     has_financials = Column(Boolean, default=False)
     link = Column(String, nullable=True)

@@ -1,7 +1,19 @@
 """Mappers for converting FMP client DTOs to database models - Company data."""
 
 from typing import Optional
+from datetime import datetime, date
+
 from fmpclient.models import company as fmp_company
+
+
+def parse_date(date_str: Optional[str]) -> Optional[date]:
+    """Parse a date string to a date object."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return None
 from app.models.company_profile import (
     CompanyProfile,
     Executive,
@@ -45,7 +57,7 @@ def map_company_profile(dto: fmp_company.CompanyProfile) -> CompanyProfile:
         dcf_diff=dto.dcf_diff,
         dcf=dto.dcf,
         image=dto.image,
-        ipo_date=dto.ipo_date,
+        ipo_date=parse_date(dto.ipo_date),
         default_image=dto.default_image,
         is_etf=dto.is_etf,
         is_actively_trading=dto.is_actively_trading,
@@ -80,7 +92,7 @@ def map_market_capitalization(dto: fmp_company.MarketCapitalization) -> MarketCa
     """Convert FMP MarketCapitalization DTO to database model."""
     return MarketCapitalization(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         market_cap=dto.market_cap,
     )
 
@@ -94,7 +106,7 @@ def map_employee_count(dto: fmp_company.EmployeeCount) -> EmployeeCount:
         period_of_report=dto.period_of_report,
         company_name=dto.company_name,
         form_type=dto.form_type,
-        filing_date=dto.filing_date,
+        filing_date=parse_date(dto.filing_date),
         employee_count=dto.employee_count,
         source=dto.source,
     )
@@ -104,7 +116,7 @@ def map_shares_float(dto: fmp_company.SharesFloat) -> SharesFloat:
     """Convert FMP SharesFloat DTO to database model."""
     return SharesFloat(
         symbol=dto.symbol,
-        date=dto.date,
+        date=parse_date(dto.date),
         free_float=dto.free_float,
         float_shares=dto.float_shares,
         outstanding_shares=dto.outstanding_shares,
@@ -118,6 +130,6 @@ def map_delisted_company(dto: fmp_company.DelistedCompany) -> DelistedCompany:
         symbol=dto.symbol,
         company_name=dto.company_name,
         exchange=dto.exchange,
-        ipo_date=dto.ipo_date,
-        delisted_date=dto.delisted_date,
+        ipo_date=parse_date(dto.ipo_date),
+        delisted_date=parse_date(dto.delisted_date),
     )

@@ -1,6 +1,19 @@
 """Mappers for converting FMP client DTOs to database models - Financial statements."""
 
+from typing import Optional
+from datetime import datetime, date
+
 from fmpclient.models import financial as fmp_financial
+
+
+def parse_date(date_str: Optional[str]) -> Optional[date]:
+    """Parse a date string to a date object."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        return None
 from app.models.financial_statements import (
     IncomeStatement,
     BalanceSheet,
@@ -11,12 +24,12 @@ from app.models.financial_statements import (
 def map_income_statement(dto: fmp_financial.IncomeStatement) -> IncomeStatement:
     """Convert FMP IncomeStatement DTO to database model."""
     return IncomeStatement(
-        date=dto.date,
+        date=parse_date(dto.date),
         symbol=dto.symbol,
         reported_currency=dto.reported_currency,
         cik=dto.cik,
-        filling_date=dto.filling_date,
-        accepted_date=dto.accepted_date,
+        filling_date=parse_date(dto.filling_date),
+        accepted_date=parse_date(dto.accepted_date),
         calendar_year=dto.calendar_year,
         period=dto.period,
         revenue=dto.revenue,
@@ -55,12 +68,12 @@ def map_income_statement(dto: fmp_financial.IncomeStatement) -> IncomeStatement:
 def map_balance_sheet(dto: fmp_financial.BalanceSheet) -> BalanceSheet:
     """Convert FMP BalanceSheet DTO to database model."""
     return BalanceSheet(
-        date=dto.date,
+        date=parse_date(dto.date),
         symbol=dto.symbol,
         reported_currency=dto.reported_currency,
         cik=dto.cik,
-        filling_date=dto.filling_date,
-        accepted_date=dto.accepted_date,
+        filling_date=parse_date(dto.filling_date),
+        accepted_date=parse_date(dto.accepted_date),
         calendar_year=dto.calendar_year,
         period=dto.period,
         cash_and_cash_equivalents=dto.cash_and_cash_equivalents,
@@ -115,12 +128,12 @@ def map_balance_sheet(dto: fmp_financial.BalanceSheet) -> BalanceSheet:
 def map_cash_flow_statement(dto: fmp_financial.CashFlowStatement) -> CashFlowStatement:
     """Convert FMP CashFlowStatement DTO to database model."""
     return CashFlowStatement(
-        date=dto.date,
+        date=parse_date(dto.date),
         symbol=dto.symbol,
         reported_currency=dto.reported_currency,
         cik=dto.cik,
-        filling_date=dto.filling_date,
-        accepted_date=dto.accepted_date,
+        filling_date=parse_date(dto.filling_date),
+        accepted_date=parse_date(dto.accepted_date),
         calendar_year=dto.calendar_year,
         period=dto.period,
         net_income=dto.net_income,

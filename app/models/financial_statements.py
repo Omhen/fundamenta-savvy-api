@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Index
+from sqlalchemy import Column, Date, Integer, String, Float, DateTime, Index
 from sqlalchemy.sql import func
 from app.db.base_class import BaseModel
 
@@ -7,12 +7,12 @@ class IncomeStatement(BaseModel):
     """Income statement data."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     symbol = Column(String, index=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     cik = Column(String, nullable=True)
-    filling_date = Column(String, nullable=True)
-    accepted_date = Column(String, nullable=True)
+    filling_date = Column(Date, nullable=True)
+    accepted_date = Column(Date, nullable=True)
     calendar_year = Column(String, index=True, nullable=True)
     period = Column(String, index=True, nullable=True)
     revenue = Column(Float, nullable=True)
@@ -58,12 +58,12 @@ class BalanceSheet(BaseModel):
     """Balance sheet data."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     symbol = Column(String, index=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     cik = Column(String, nullable=True)
-    filling_date = Column(String, nullable=True)
-    accepted_date = Column(String, nullable=True)
+    filling_date = Column(Date, nullable=True)
+    accepted_date = Column(Date, nullable=True)
     calendar_year = Column(String, index=True, nullable=True)
     period = Column(String, index=True, nullable=True)
     cash_and_cash_equivalents = Column(Float, nullable=True)
@@ -125,12 +125,12 @@ class CashFlowStatement(BaseModel):
     """Cash flow statement data."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True, nullable=False)
+    date = Column(Date, index=True, nullable=False)
     symbol = Column(String, index=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     cik = Column(String, nullable=True)
-    filling_date = Column(String, nullable=True)
-    accepted_date = Column(String, nullable=True)
+    filling_date = Column(Date, nullable=True)
+    accepted_date = Column(Date, nullable=True)
     calendar_year = Column(String, index=True, nullable=True)
     period = Column(String, index=True, nullable=True)
     net_income = Column(Float, nullable=True)
