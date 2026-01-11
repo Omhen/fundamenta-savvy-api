@@ -60,6 +60,6 @@ class StockNews(BaseModel):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     __table_args__ = (
-        Index('idx_stocknews_url', 'url', unique=True),
+        Index('idx_stocknews_url', 'symbol', 'url', unique=True),
         Index('idx_stocknews_symbol_date', 'symbol', 'published_date'),
     )

@@ -1,6 +1,6 @@
 """Mappers for converting FMP client DTOs to database models - Other data types."""
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from fmpclient.models import directory as fmp_directory
 from fmpclient.models import company as fmp_company
