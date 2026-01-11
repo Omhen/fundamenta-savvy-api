@@ -63,6 +63,13 @@ from app.models.market_performance import (
 # SEC filings models
 from app.models.sec_filings import SECFiling
 
+# News models
+from app.models.news import (
+    FMPArticle,
+    GeneralNews,
+    StockNews,
+)
+
 __all__ = [
     # Company models
     "CompanyProfile",
@@ -107,4 +114,8 @@ __all__ = [
     "ActiveStock",
     # SEC filings models
     "SECFiling",
+    # News models
+    "FMPArticle",
+    "GeneralNews",
+    "StockNews",
 ]

@@ -1,5 +1,6 @@
 """Mappers for converting FMP client DTOs to database models - Other data types."""
 
+from datetime import datetime
 from typing import Optional
 from fmpclient.models import directory as fmp_directory
 from fmpclient.models import company as fmp_company
@@ -7,8 +8,9 @@ from fmpclient.models import dividends_earnings as fmp_div_earn
 from fmpclient.models import economics as fmp_economics
 from fmpclient.models import market_performance as fmp_market
 from fmpclient.models import sec_filings as fmp_sec
+from fmpclient.models import news as fmp_news
 
-from app.mappers.utils import parse_date
+from app.mappers.utils import parse_date, parse_datetime
 from app.models.directory import (
     StockSymbol,
     FinancialStatementSymbol,
@@ -40,6 +42,11 @@ from app.models.market_performance import (
     ActiveStock,
 )
 from app.models.sec_filings import SECFiling
+from app.models.news import (
+    FMPArticle,
+    GeneralNews,
+    StockNews,
+)
 
 
 # Company mappers
@@ -322,19 +329,6 @@ def map_active_stock(dto: fmp_market.ActiveStock, date_val: Optional[date] = Non
 
 
 # SEC filings mapper
-def parse_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
-    """Parse a datetime string to a datetime object."""
-    if not datetime_str:
-        return None
-    try:
-        return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-    except ValueError:
-        try:
-            return datetime.strptime(datetime_str, "%Y-%m-%d")
-        except ValueError:
-            return None
-
-
 def map_sec_filing(dto: fmp_sec.SECFiling) -> SECFiling:
     """Convert FMP SECFiling DTO to database model."""
     return SECFiling(
@@ -346,4 +340,47 @@ def map_sec_filing(dto: fmp_sec.SECFiling) -> SECFiling:
         has_financials=dto.has_financials or False,
         link=dto.link,
         final_link=dto.final_link,
+    )
+
+
+# News mappers
+def map_fmp_article(dto: fmp_news.FMPArticle) -> FMPArticle:
+    """Convert FMP FMPArticle DTO to database model."""
+    return FMPArticle(
+        title=dto.title,
+        date=parse_datetime(dto.date),
+        content=dto.content,
+        tickers=dto.tickers,
+        image=dto.image,
+        link=dto.link,
+        author=dto.author,
+        site=dto.site,
+    )
+
+
+def map_general_news(dto: fmp_news.GeneralNews) -> GeneralNews:
+    """Convert FMP GeneralNews DTO to database model."""
+    return GeneralNews(
+        published_date=parse_datetime(dto.published_date),
+        title=dto.title,
+        text=dto.text,
+        url=dto.url,
+        publisher=dto.publisher,
+        symbol=dto.symbol,
+        site=dto.site,
+        image=dto.image,
+    )
+
+
+def map_stock_news(dto: fmp_news.StockNews) -> StockNews:
+    """Convert FMP StockNews DTO to database model."""
+    return StockNews(
+        symbol=dto.symbol,
+        published_date=parse_datetime(dto.published_date),
+        publisher=dto.publisher,
+        title=dto.title,
+        text=dto.text,
+        url=dto.url,
+        site=dto.site,
+        image=dto.image,
     )
