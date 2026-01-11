@@ -6,4 +6,4 @@ python-dotenv==1.0.1
 pydantic==2.10.3
 pydantic-settings==2.6.1
 alembic==1.14.0
-fmpclient @ git+ssh://git@github.com/Omhen/financialmodelingprep-client.git@0.1.2
+fmpclient @ git+ssh://git@github.com/Omhen/financialmodelingprep-client.git@0.1.3
