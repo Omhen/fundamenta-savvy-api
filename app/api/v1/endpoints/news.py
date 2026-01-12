@@ -53,9 +53,9 @@ def list_general_news(
     if symbol:
         query = query.filter(GeneralNews.symbol == symbol)
     if from_date:
-        query = query.filter(GeneralNews.date >= from_date)
+        query = query.filter(GeneralNews.published_date >= from_date)
     if to_date:
-        query = query.filter(GeneralNews.date <= to_date)
+        query = query.filter(GeneralNews.published_date <= to_date)
     return query.order_by(GeneralNews.published_date.desc()).all()
 
 

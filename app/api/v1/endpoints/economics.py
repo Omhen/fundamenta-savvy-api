@@ -60,12 +60,18 @@ def list_economic_indicators(
 @router.get("/calendar", response_model=List[EconomicCalendarEventResponse])
 def list_economic_calendar(
     country: Optional[str] = Query(None, description="Filter by country"),
+    from_date: date | None = None,
+    to_date: date | None = None,
     db: Session = Depends(get_db)
 ):
     """List economic calendar events with optional filters."""
     query = db.query(EconomicCalendarEvent)
     if country:
         query = query.filter(EconomicCalendarEvent.country == country)
+    if from_date:
+        query = query.filter(EconomicCalendarEvent.date >= from_date)
+    if to_date:
+        query = query.filter(EconomicCalendarEvent.date <= to_date)
     return query.order_by(EconomicCalendarEvent.date.desc()).all()
 
 
