@@ -51,10 +51,10 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy virtual environment from builder
-COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder --chown=1000:1000 /opt/venv /opt/venv
 
 # Copy project files
-COPY . .
+COPY --chown=1000:1000 . .
 
 # Expose port
 EXPOSE 8000
