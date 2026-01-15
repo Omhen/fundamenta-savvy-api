@@ -1,6 +1,6 @@
 """Economics domain API endpoints."""
 
-from datetime import date
+from datetime import date, datetime, timedelta
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -17,7 +17,7 @@ from app.schemas.economics import (
     TreasuryRateResponse,
     EconomicIndicatorResponse,
     EconomicCalendarEventResponse,
-    MarketRiskPremiumResponse,
+    MarketRiskPremiumResponse, EconomicIndicatorGrowth,
 )
 
 router = APIRouter()
@@ -70,6 +70,35 @@ def list_economic_calendar(
     if to_date:
         query = query.filter(EconomicCalendarEvent.date <= to_date)
     return query.order_by(EconomicCalendarEvent.date).all()
+
+
+@router.get("/indicator-growth", response_model=EconomicIndicatorGrowth)
+def get_economic_indicator_growth(
+    indicator: str = Query(None, description="Indicator Name to compute"),
+    country: Optional[str] = Query(None, description="Country the indicator refers to"),
+    db: Session = Depends(get_db)
+):
+    min_date = datetime.utcnow() - timedelta(days=365)
+    country = country or "US"
+    result = (
+        db
+        .query(EconomicCalendarEvent)
+        .filter(EconomicCalendarEvent.date >= min_date)
+        .filter(EconomicCalendarEvent.country == country)
+        .filter(EconomicCalendarEvent.event.ilike(f"{indicator}%"))
+        .filter(EconomicCalendarEvent.actual.is_not(None))
+        .order_by(EconomicCalendarEvent.date.desc())
+        .limit(2)
+    ).all()
+    if len(result) < 2:
+        raise Exception("Not enough datapoints")
+    return EconomicIndicatorGrowth(
+        name=indicator,
+        value=result[0].actual,
+        growth=result[0].actual - result[1].actual,
+        growth_pct=(result[0].actual - result[1].actual) / result[1].actual,
+        country=country,
+    )
 
 
 # Market Risk Premium endpoints

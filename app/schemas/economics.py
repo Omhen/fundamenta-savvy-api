@@ -56,6 +56,19 @@ class EconomicCalendarEventResponse(BaseModel):
         from_attributes = True
 
 
+class EconomicIndicatorGrowth(BaseModel):
+    """Economic indicator growth response schema."""
+
+    name: str
+    value: Optional[float]
+    growth: Optional[float]
+    growth_pct: Optional[float]
+    country: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
 class MarketRiskPremiumResponse(BaseModel):
     """Market risk premium response schema."""
 
