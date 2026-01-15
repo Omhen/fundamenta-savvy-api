@@ -28,7 +28,7 @@ class DividendCalendarEvent(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String, index=True, nullable=False)
-    date = Column(Date, index=True, nullable=False)
+    date = Column(DateTime, index=True, nullable=False)
     label = Column(String, nullable=True)
     adj_dividend = Column(Float, nullable=True)
     dividend = Column(Float, nullable=True)

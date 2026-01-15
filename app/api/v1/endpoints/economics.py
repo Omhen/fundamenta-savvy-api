@@ -72,7 +72,7 @@ def list_economic_calendar(
         query = query.filter(EconomicCalendarEvent.date >= from_date)
     if to_date:
         query = query.filter(EconomicCalendarEvent.date <= to_date)
-    return query.order_by(EconomicCalendarEvent.date.desc()).all()
+    return query.order_by(EconomicCalendarEvent.date).all()
 
 
 # Market Risk Premium endpoints

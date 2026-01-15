@@ -1,6 +1,6 @@
 """Pydantic schemas for economics domain."""
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -43,7 +43,7 @@ class EconomicIndicatorResponse(BaseModel):
 class EconomicCalendarEventResponse(BaseModel):
     """Economic calendar event response schema."""
 
-    date: date
+    date: datetime
     event: Optional[str] = None
     country: Optional[str] = None
     currency: Optional[str] = None

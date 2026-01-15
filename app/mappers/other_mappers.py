@@ -201,7 +201,7 @@ def map_economic_indicator(dto: fmp_economics.EconomicIndicator) -> EconomicIndi
 def map_economic_calendar_event(dto: fmp_economics.EconomicCalendarEvent) -> EconomicCalendarEvent:
     """Convert FMP EconomicCalendarEvent DTO to database model."""
     return EconomicCalendarEvent(
-        date=parse_date(dto.date),
+        date=parse_datetime(dto.date),
         event=dto.event,
         country=dto.country,
         currency=dto.currency,

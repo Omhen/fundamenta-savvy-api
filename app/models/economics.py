@@ -43,7 +43,7 @@ class EconomicCalendarEvent(BaseModel):
     """Scheduled economic data release event."""
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(Date, index=True, nullable=False)
+    date = Column(DateTime, index=True, nullable=False)
     event = Column(String, index=True, nullable=True)
     country = Column(String, index=True, nullable=True)
     currency = Column(String, nullable=True)
