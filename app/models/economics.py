@@ -30,12 +30,10 @@ class EconomicIndicator(BaseModel):
     date = Column(Date, index=True, nullable=False)
     value = Column(Float, nullable=True)
     name = Column(String, index=True, nullable=True)
-    country = Column(String, index=True, nullable=True)
-    period = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
-        Index('idx_econ_indicator_name_date_country', 'name', 'date', 'country', unique=True),
+        Index('idx_econ_indicator_name_date', 'name', 'date', unique=True),
     )
 
 

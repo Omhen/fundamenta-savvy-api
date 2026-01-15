@@ -33,8 +33,6 @@ class EconomicIndicatorResponse(BaseModel):
     date: date
     value: Optional[float] = None
     name: Optional[str] = None
-    country: Optional[str] = None
-    period: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -44,15 +44,12 @@ def get_treasury_rate(date: date, db: Session = Depends(get_db)):
 @router.get("/indicators", response_model=List[EconomicIndicatorResponse])
 def list_economic_indicators(
     name: Optional[str] = Query(None, description="Filter by indicator name"),
-    country: Optional[str] = Query(None, description="Filter by country"),
     db: Session = Depends(get_db)
 ):
     """List economic indicators with optional filters."""
     query = db.query(EconomicIndicator)
     if name:
         query = query.filter(EconomicIndicator.name == name)
-    if country:
-        query = query.filter(EconomicIndicator.country == country)
     return query.order_by(EconomicIndicator.date.desc()).all()
 
 

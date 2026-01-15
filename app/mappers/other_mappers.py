@@ -193,8 +193,6 @@ def map_economic_indicator(dto: fmp_economics.EconomicIndicator) -> EconomicIndi
         date=parse_date(dto.date),
         value=dto.value,
         name=dto.name,
-        country=dto.country,
-        period=dto.period,
     )
 
 
