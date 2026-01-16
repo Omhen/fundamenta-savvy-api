@@ -233,6 +233,17 @@ def map_sector_performance(dto: fmp_market.SectorPerformance) -> SectorPerforman
     )
 
 
+# Market performance mappers
+def map_historical_sector_performance(dto: fmp_market.HistoricalSectorPerformance) -> SectorPerformance:
+    """Convert FMP SectorPerformance DTO to database model."""
+    return SectorPerformance(
+        sector=dto.sector,
+        date=parse_date(dto.date),
+        exchange=dto.exchange,
+        average_change=dto.average_change,
+    )
+
+
 def map_industry_performance(dto: fmp_market.IndustryPerformance) -> IndustryPerformance:
     """Convert FMP IndustryPerformance DTO to database model."""
     return IndustryPerformance(
