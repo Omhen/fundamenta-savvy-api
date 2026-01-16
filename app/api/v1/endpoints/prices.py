@@ -1,7 +1,7 @@
 """Quotes and prices domain API endpoints."""
 
 from datetime import date, datetime
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -44,24 +44,21 @@ def get_latest_quote(symbol: str, db: Session = Depends(get_db)):
 
 # Historical Price endpoints
 @router.get("/historical/{symbol}", response_model=List[HistoricalPriceResponse])
-def get_historical_prices_by_symbol(symbol: str, db: Session = Depends(get_db)):
-    """Get all historical prices for a symbol."""
-    prices = db.query(HistoricalPrice).filter(
+def get_historical_prices_by_symbol(
+    symbol: str,
+    from_date: date | None = None,
+    to_date: date | None = None,
+    db: Session = Depends(get_db)
+):
+    """Get historical prices for a symbol."""
+    query = db.query(HistoricalPrice).filter(
         HistoricalPrice.symbol == symbol
-    ).order_by(HistoricalPrice.date.desc()).all()
-    return prices
-
-
-@router.get("/historical/{symbol}/{date}", response_model=HistoricalPriceResponse)
-def get_historical_price(symbol: str, date: date, db: Session = Depends(get_db)):
-    """Get historical price by symbol and date."""
-    price = db.query(HistoricalPrice).filter(
-        HistoricalPrice.symbol == symbol,
-        HistoricalPrice.date == date
-    ).first()
-    if not price:
-        raise HTTPException(status_code=404, detail=f"Historical price not found for {symbol} on {date}")
-    return price
+    )
+    if from_date:
+        query = query.filter(HistoricalPrice.date >= from_date)
+    if to_date:
+        query = query.filter(HistoricalPrice.date <= to_date)
+    return query.order_by(HistoricalPrice.date).all()
 
 
 # Intraday Price endpoints
@@ -72,15 +69,3 @@ def get_intraday_prices_by_symbol(symbol: str, db: Session = Depends(get_db)):
         IntradayPrice.symbol == symbol
     ).order_by(IntradayPrice.date.desc()).all()
     return prices
-
-
-@router.get("/intraday/{symbol}/{dt}", response_model=IntradayPriceResponse)
-def get_intraday_price(symbol: str, dt: datetime, db: Session = Depends(get_db)):
-    """Get intraday price by symbol and datetime."""
-    price = db.query(IntradayPrice).filter(
-        IntradayPrice.symbol == symbol,
-        IntradayPrice.date == dt
-    ).first()
-    if not price:
-        raise HTTPException(status_code=404, detail=f"Intraday price not found for {symbol} at {dt}")
-    return price

@@ -20,50 +20,22 @@ Environment Variables:
     FMP_API_KEY: Financial Modeling Prep API key (required)
 """
 
-import argparse
 import os
 import sys
 from typing import List
 
 from fmpclient import FMPClient
-from sqlalchemy.orm import Session
 
 from scripts.base import get_db_session, run_async_script
-from app.models.directory import StockSymbol, FinancialStatementSymbol
 from app.mappers.company_mappers import map_company_profile
 from app.mappers.utils import map_and_save
 
 
 # Default batch size for fetching profiles
+from scripts.config import AVAILABLE_EXCHANGES
+from scripts.utils import get_symbols_with_financials
+
 DEFAULT_BATCH_SIZE = 50
-
-
-def get_symbols_with_financials(session: Session, exchanges: List[str] = None) -> List[str]:
-    """
-    Get all symbols that are:
-    - Listed on specified exchanges (from StockSymbol)
-    - Have financial statements available (from FinancialStatementSymbol)
-
-    Args:
-        session: Database session
-        exchanges: List of exchange short names (default: ["NYSE", "NASDAQ"])
-
-    Returns:
-        List of stock symbols
-    """
-    exchanges = exchanges or ["NYSE", "NASDAQ"]
-
-    results = (
-        session.query(StockSymbol.symbol)
-        .join(
-            FinancialStatementSymbol,
-            StockSymbol.symbol == FinancialStatementSymbol.symbol
-        )
-        .filter(StockSymbol.exchange_short_name.in_(exchanges))
-        .all()
-    )
-
-    return [result.symbol for result in results]
 
 
 def chunk_list(lst: List, chunk_size: int) -> List[List]:
@@ -124,11 +96,11 @@ async def main():
         sys.exit(1)
 
     # Get NYSE and NASDAQ symbols with financial statements
-    print("Retrieving NYSE and NASDAQ symbols with financial statements...")
+    print(f"Retrieving symbols with financial statements from {AVAILABLE_EXCHANGES}")
     with get_db_session() as session:
-        symbols = get_symbols_with_financials(session, exchanges=["NYSE", "NASDAQ"])
+        symbols = get_symbols_with_financials(session, exchanges=AVAILABLE_EXCHANGES)
 
-    print(f"Found {len(symbols)} NYSE/NASDAQ symbols with financial statement availability")
+    print(f"Found {len(symbols)} symbols with financial statement availability")
 
     if not symbols:
         print("No symbols to process. Exiting.")

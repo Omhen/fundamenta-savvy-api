@@ -22,44 +22,17 @@ Environment Variables:
 import os
 import sys
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import Optional
 
 from fmpclient import FMPClient
 from sqlalchemy.orm import Session
 
-from scripts.base import get_db_session, run_async_script, RateLimiter
-from app.models.directory import StockSymbol, FinancialStatementSymbol
+from scripts.base import get_db_session, run_async_script
 from app.models.financial_statements import BalanceSheet
 from app.mappers.financial_mappers import map_balance_sheet
 from app.mappers.utils import map_and_save
-
-
-def get_symbols_with_financials(session: Session, exchanges: List[str] = None) -> List[str]:
-    """
-    Get all symbols that are:
-    - Listed on specified exchanges (from StockSymbol)
-    - Have financial statements available (from FinancialStatementSymbol)
-
-    Args:
-        session: Database session
-        exchanges: List of exchange short names (default: ["NYSE", "NASDAQ"])
-
-    Returns:
-        List of stock symbols
-    """
-    exchanges = exchanges or ["NYSE", "NASDAQ"]
-
-    results = (
-        session.query(StockSymbol.symbol)
-        .join(
-            FinancialStatementSymbol,
-            StockSymbol.symbol == FinancialStatementSymbol.symbol
-        )
-        .filter(StockSymbol.exchange_short_name.in_(exchanges))
-        .all()
-    )
-
-    return [result.symbol for result in results]
+from scripts.config import AVAILABLE_EXCHANGES
+from scripts.utils import get_symbols_with_financials
 
 
 def get_last_balance_sheet(session: Session, symbol: str) -> Optional[BalanceSheet]:
@@ -229,7 +202,7 @@ async def main():
     # Get NYSE and NASDAQ symbols with financial statements
     print("Retrieving NYSE and NASDAQ symbols with financial statements...")
     with get_db_session() as session:
-        symbols = get_symbols_with_financials(session, exchanges=["NYSE", "NASDAQ"])
+        symbols = get_symbols_with_financials(session, exchanges=AVAILABLE_EXCHANGES)
 
     print(f"Found {len(symbols)} NYSE/NASDAQ symbols with financial statement availability")
 

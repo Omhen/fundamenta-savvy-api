@@ -32,34 +32,8 @@ from app.models.directory import StockSymbol, FinancialStatementSymbol
 from app.models.financial_statements import IncomeStatement
 from app.mappers.financial_mappers import map_income_statement
 from app.mappers.utils import map_and_save
-
-
-def get_symbols_with_financials(session: Session, exchanges: List[str] = None) -> List[str]:
-    """
-    Get all symbols that are:
-    - Listed on specified exchanges (from StockSymbol)
-    - Have financial statements available (from FinancialStatementSymbol)
-
-    Args:
-        session: Database session
-        exchanges: List of exchange short names (default: ["NYSE", "NASDAQ"])
-
-    Returns:
-        List of stock symbols
-    """
-    exchanges = exchanges or ["NYSE", "NASDAQ"]
-
-    results = (
-        session.query(StockSymbol.symbol)
-        .join(
-            FinancialStatementSymbol,
-            StockSymbol.symbol == FinancialStatementSymbol.symbol
-        )
-        .filter(StockSymbol.exchange_short_name.in_(exchanges))
-        .all()
-    )
-
-    return [result.symbol for result in results]
+from scripts.config import AVAILABLE_EXCHANGES
+from scripts.utils import get_symbols_with_financials
 
 
 def get_last_income_statement(session: Session, symbol: str) -> Optional[IncomeStatement]:
@@ -229,7 +203,7 @@ async def main():
     # Get NYSE and NASDAQ symbols with financial statements
     print("Retrieving NYSE and NASDAQ symbols with financial statements...")
     with get_db_session() as session:
-        symbols = get_symbols_with_financials(session, exchanges=["NYSE", "NASDAQ"])
+        symbols = get_symbols_with_financials(session, exchanges=AVAILABLE_EXCHANGES)
 
     print(f"Found {len(symbols)} NYSE/NASDAQ symbols with financial statement availability")
 
