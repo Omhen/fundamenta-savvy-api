@@ -33,7 +33,7 @@ class Quote(BaseModel):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     __table_args__ = (
-        Index('idx_quote_symbol_timestamp', 'symbol', 'timestamp'),
+        Index('idx_quote_symbol_timestamp', 'symbol', 'timestamp', unique=True),
     )
 
 

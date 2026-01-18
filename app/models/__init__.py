@@ -70,6 +70,9 @@ from app.models.news import (
     StockNews,
 )
 
+# Metrics models
+from app.models.metrics import CompanyMetrics
+
 __all__ = [
     # Company models
     "CompanyProfile",
@@ -118,4 +121,6 @@ __all__ = [
     "FMPArticle",
     "GeneralNews",
     "StockNews",
+    # Metrics models
+    "CompanyMetrics",
 ]

@@ -10,6 +10,7 @@ from app.api.v1.endpoints import (
     sec,
     directory,
     news,
+    metrics,
 )
 
 api_router = APIRouter()
@@ -43,3 +44,6 @@ api_router.include_router(directory.router, prefix="/directory", tags=["director
 
 # News domain
 api_router.include_router(news.router, prefix="/news", tags=["news"])
+
+# Metrics domain
+api_router.include_router(metrics.router, prefix="/metrics", tags=["metrics"])
